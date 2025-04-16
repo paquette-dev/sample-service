@@ -14,6 +14,11 @@ func main() {
 	}
 	defer db.Close()
 
+	err = database.SeedDB(db)
+	if err != nil {
+		log.Fatalf("Failed to seed database: %v", err)
+	}
+
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")

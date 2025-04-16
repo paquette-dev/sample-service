@@ -1,0 +1,58 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@company.com",
+    "username": "johndoe",
+    "department": "Engineering",
+    "userStatus": "A"
+  },
+  {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "jane.smith@company.com",
+    "username": "janesmith",
+    "department": "Marketing",
+    "userStatus": "A"
+  },
+  {
+    "firstName": "Robert",
+    "lastName": "Johnson",
+    "email": "robert.johnson@company.com",
+    "username": "rjohnson",
+    "department": "Finance",
+    "userStatus": "I"
+  },
+  {
+    "firstName": "Emily",
+    "lastName": "Williams",
+    "email": "emily.williams@company.com",
+    "username": "ewilliams",
+    "department": "Human Resources",
+    "userStatus": "A"
+  },
+  {
+    "firstName": "Michael",
+    "lastName": "Brown",
+    "email": "michael.brown@company.com",
+    "username": "mbrown",
+    "department": "Engineering",
+    "userStatus": "A"
+  },
+  {
+    "firstName": "Sarah",
+    "lastName": "Davis",
+    "email": "sarah.davis@company.com",
+    "username": "sdavis",
+    "department": "Sales",
+    "userStatus": "T"
+  },
+  {
+    "firstName": "David",
+    "lastName": "Miller",
+    "email": "david.miller@company.com",
+    "username": "dmiller",
+    "department": "IT Support",
+    "userStatus": "A"
+  }
+]

@@ -15,12 +15,12 @@ func InitDB(path string) (*sql.DB, error) {
 	schema := `
 	CREATE TABLE IF NOT EXISTS users (
 		user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-		user_name TEXT NOT NULL,
-		first_name TEXT NOT NULL,
-		last_name TEXT NOT NULL,
-		email TEXT NOT NULL,
-		department TEXT NOT NULL,
-		status TEXT NOT NULL
+		user_name VARCHAR(50) NOT NULL,
+		first_name VARCHAR(255) NOT NULL,
+		last_name VARCHAR(255) NOT NULL,
+		email VARCHAR(255) NOT NULL,
+		department VARCHAR(255),
+		user_status VARCHAR(1) NOT NULL
 	);`
 
 	_, err = db.Exec(schema)
