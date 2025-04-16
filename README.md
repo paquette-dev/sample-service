@@ -8,6 +8,10 @@ A simple REST API service built with Go and Echo framework that serves as a back
 
 - RESTful API endpoints
 - Built with Echo framework for high performance
+- Database integration with SQLite
+- User management endpoints
+- Error handling and validation
+- Testing with Ginkgo and Gomega
 
 ## Prerequisites
 
@@ -39,4 +43,12 @@ Start the server:
 
 ```bash
 go run cmd/server/main.go
+```
+
+## Testing
+
+Run the tests:
+
+```bash
+go test -v ./...
 ```
