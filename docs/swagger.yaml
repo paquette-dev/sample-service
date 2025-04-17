@@ -108,4 +108,31 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Get user by ID
+    put:
+      consumes:
+      - application/json
+      description: Update a user in the database
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update a user
 swagger: "2.0"

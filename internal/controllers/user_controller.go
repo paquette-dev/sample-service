@@ -83,3 +83,26 @@ func (uc *UserController) CreateUser(ctx echo.Context) error {
 
 	return response.JSONSuccessResponse(ctx, "User created successfully", newUser)
 }
+
+// @Summary Update a user
+// @Description Update a user in the database
+// @Accept json
+// @Produce json
+// @Param user body model.User true "User details"
+// @Success 200 {object} response.SuccessResponse	
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /users/{id} [put]
+func (uc *UserController) UpdateUser(ctx echo.Context) error {
+	var user model.User
+	if err := ctx.Bind(&user); err != nil {
+		return response.JSONErrorResponse(ctx, "Invalid request body", err.Error())
+	}
+
+	updatedUser, err := uc.repo.UpdateUser(user)
+	if err != nil {
+		return response.JSONErrorResponse(ctx, "Failed to update user", err.Error())
+	}
+
+	return response.JSONSuccessResponse(ctx, "User updated successfully", updatedUser)
+}

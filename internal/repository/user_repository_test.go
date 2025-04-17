@@ -3,6 +3,7 @@ package repository_test
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"sample-service/internal/model"
 	"sample-service/internal/repository"
 	"testing"
@@ -275,6 +276,108 @@ var _ = ginkgo.Describe("UserRepository", func() {
 
 			// Call the function
 			_, err := userRepo.CreateUser(expectedUser)
+
+			// Assertions
+			gomega.Expect(err).To(gomega.Equal(expectedError))
+
+			// Verify all expectations were met
+			err = mock.ExpectationsWereMet()
+			gomega.Expect(err).NotTo(gomega.HaveOccurred())
+		})
+	})
+
+	ginkgo.Context("UpdateUser", func() {
+		ginkgo.It("should update a user", func() {
+			// Setup the expected user
+			expectedUser := expectedUsers[0]
+    
+			// First, mock the GetUserByID query (not COUNT)
+			rows := sqlmock.NewRows([]string{"user_id", "user_name", "first_name", "last_name", "email", "department", "user_status"})
+			rows.AddRow(expectedUser.ID, expectedUser.UserName, expectedUser.FirstName, expectedUser.LastName, expectedUser.Email, expectedUser.Department, expectedUser.UserStatus)
+			
+			mock.ExpectQuery("SELECT \\* FROM users WHERE user_id = \\?").
+				WithArgs(expectedUser.ID).
+				WillReturnRows(rows)
+			
+			// Then, mock the update query
+			mock.ExpectExec("UPDATE users SET user_name = \\?, first_name = \\?, last_name = \\?, email = \\?, department = \\?, user_status = \\? WHERE user_id = \\?").
+				WithArgs(
+					expectedUser.UserName,
+					expectedUser.FirstName,
+					expectedUser.LastName,
+					expectedUser.Email,
+					expectedUser.Department,
+					expectedUser.UserStatus,
+					expectedUser.ID,
+				).
+				WillReturnResult(sqlmock.NewResult(1, 1)) // id=1, affected=1
+			
+			// Call the function
+			user, err := userRepo.UpdateUser(expectedUser)
+			
+			// Assertions
+			gomega.Expect(err).NotTo(gomega.HaveOccurred())
+			
+			// Create a copy of expectedUser with ID=1 for comparison
+			expectedUserWithID := expectedUser
+			expectedUserWithID.ID = 1
+			gomega.Expect(*user).To(gomega.Equal(expectedUserWithID))
+			
+			// Verify all expectations were met
+			err = mock.ExpectationsWereMet()
+			gomega.Expect(err).NotTo(gomega.HaveOccurred())
+		})
+
+		ginkgo.It("should return error when user not found", func() {
+			// Setup the expected user
+			expectedUser := expectedUsers[0]
+
+			// Mock the GetUserByID query to return an error
+			expectedError := sql.ErrNoRows
+			mock.ExpectQuery("SELECT \\* FROM users WHERE user_id = \\?").
+				WithArgs(expectedUser.ID).
+				WillReturnError(expectedError)
+
+			// Call the function
+			_, err := userRepo.UpdateUser(expectedUser)    
+			
+			// Assertions
+			gomega.Expect(err).To(gomega.HaveOccurred())
+			gomega.Expect(err.Error()).To(gomega.ContainSubstring(fmt.Sprintf("user with ID %d not found", expectedUser.ID)))
+
+			// Verify all expectations were met
+			err = mock.ExpectationsWereMet()
+			gomega.Expect(err).NotTo(gomega.HaveOccurred())
+		})
+
+		ginkgo.It("should return an error when the database query fails", func() {
+			// Setup the expected user
+			expectedUser := expectedUsers[0]
+    
+			// First, mock the GetUserByID query
+			rows := sqlmock.NewRows([]string{"user_id", "user_name", "first_name", "last_name", "email", "department", "user_status"})
+			rows.AddRow(expectedUser.ID, expectedUser.UserName, expectedUser.FirstName, expectedUser.LastName, expectedUser.Email, expectedUser.Department, expectedUser.UserStatus)
+			
+			mock.ExpectQuery("SELECT \\* FROM users WHERE user_id = \\?").
+				WithArgs(expectedUser.ID).
+				WillReturnRows(rows)
+
+			// Setup the expected query
+			expectedError := errors.New("database query failed")
+			mock.ExpectExec("UPDATE users SET user_name = \\?, first_name = \\?, last_name = \\?, email = \\?, department = \\?, user_status = \\? WHERE user_id = \\?").
+				WithArgs(
+					expectedUser.UserName,
+					expectedUser.FirstName,
+					expectedUser.LastName,
+					expectedUser.Email,
+					expectedUser.Department,
+					expectedUser.UserStatus,
+					expectedUser.ID,
+				).
+				WillReturnError(expectedError)
+
+			// Call the function
+			_, err := userRepo.UpdateUser(expectedUser)
 
 			// Assertions
 			gomega.Expect(err).To(gomega.Equal(expectedError))

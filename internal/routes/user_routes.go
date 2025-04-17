@@ -15,4 +15,5 @@ func RegisterUserRoutes(e *echo.Echo, db *sql.DB) {
     e.GET("/users", userController.GetAllUsers)
     e.GET("/users/:id", userController.GetUserByID)
     e.POST("/users", userController.CreateUser)
+    e.PUT("/users/:id", userController.UpdateUser)
 }

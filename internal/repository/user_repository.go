@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetUserByID(id int) (*model.User, error)
 	CheckIfUsernameExists(username string) (bool, error)
 	CreateUser(user model.User) (*model.User, error)
+	UpdateUser(user model.User) (*model.User, error)
 }
 
 type userRepo struct {
@@ -90,5 +91,24 @@ func (r *userRepo) CreateUser(user model.User) (*model.User, error) {
 	userID, err := result.LastInsertId()
 	user.ID = userID
 
+    return &user, nil
+}
+
+// UpdateUser updates a user in the database
+func (r *userRepo) UpdateUser(user model.User) (*model.User, error) {
+	// Check if user exists
+	_, err := r.GetUserByID(int(user.ID))
+	if err != nil {
+		return nil, fmt.Errorf("user with ID %d not found: %w", user.ID, err)
+	}
+	
+	// Update the user
+	_, err = r.db.Exec(
+		"UPDATE users SET user_name = ?, first_name = ?, last_name = ?, email = ?, department = ?, user_status = ? WHERE user_id = ?",
+		user.UserName, user.FirstName, user.LastName, user.Email, user.Department, user.UserStatus, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	
 	return &user, nil
 }
