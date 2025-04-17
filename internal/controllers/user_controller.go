@@ -106,3 +106,30 @@ func (uc *UserController) UpdateUser(ctx echo.Context) error {
 
 	return response.JSONSuccessResponse(ctx, "User updated successfully", updatedUser)
 }
+
+// @Summary Delete a user
+// @Description Delete a user from the database
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} response.SuccessResponse	
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /users/{id} [delete]
+func (uc *UserController) DeleteUser(ctx echo.Context) error {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return response.JSONErrorResponse(ctx, "Invalid user ID", err.Error())
+	}
+
+	deleted, err := uc.repo.DeleteUser(id)
+	if err != nil {
+		return response.JSONErrorResponse(ctx, "Failed to delete user", err.Error())
+	}
+
+	if !deleted {
+		return response.JSONErrorResponse(ctx, "User not found", fmt.Sprintf("No user found with ID %d", id))
+	}
+
+	return response.JSONSuccessResponse(ctx, "User deleted successfully", nil)
+}

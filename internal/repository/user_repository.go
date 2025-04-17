@@ -12,6 +12,7 @@ type UserRepository interface {
 	CheckIfUsernameExists(username string) (bool, error)
 	CreateUser(user model.User) (*model.User, error)
 	UpdateUser(user model.User) (*model.User, error)
+	DeleteUser(id int) (bool, error)
 }
 
 type userRepo struct {
@@ -109,6 +110,21 @@ func (r *userRepo) UpdateUser(user model.User) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &user, nil
+}
+
+// DeleteUser deletes a user from the database
+func (r *userRepo) DeleteUser(id int) (bool, error) {
+	result, err := r.db.Exec("DELETE FROM users WHERE user_id = ?", id)
+	if err != nil {
+		return false, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+
+	return rowsAffected > 0, nil
 }

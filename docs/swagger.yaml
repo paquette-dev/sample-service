@@ -82,6 +82,32 @@ paths:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Create a new user
   /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user from the database
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a user
     get:
       consumes:
       - application/json
