@@ -8,6 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// UserSeed represents the user data to be seeded
 type UserSeed struct {
 	FirstName  string `json:"firstName"`
 	LastName   string `json:"lastName"`
@@ -17,6 +18,7 @@ type UserSeed struct {
 	UserName   string `json:"username"`
 }
 
+// SeedDB seeds the database with the user data
 func SeedDB(db *sql.DB) error {
 	seedData, err := os.ReadFile("./seed.json")
 	if err != nil {

@@ -52,3 +52,7 @@ Run the tests:
 ```bash
 go test -v ./...
 ```
+
+## API Documentation
+
+The API documentation is available in the `docs` directory.

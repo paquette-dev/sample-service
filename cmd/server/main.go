@@ -1,10 +1,15 @@
+// @title Sample Service API
+// @version 1.0
+// @description API for managing users
+// @host localhost:1323
+// @BasePath /
 package main
 
 import (
 	"log"
-	"net/http"
 	"github.com/labstack/echo/v4"
 	"sample-service/internal/database"
+	"sample-service/internal/routes"
 )
 
 func main() {
@@ -20,8 +25,7 @@ func main() {
 	}
 
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	routes.RegisterUserRoutes(e, db)
+	routes.RegisterSwaggerRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }
