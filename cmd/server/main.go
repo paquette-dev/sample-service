@@ -8,6 +8,7 @@ package main
 import (
 	"log"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"sample-service/internal/database"
 	"sample-service/internal/routes"
 )
@@ -25,6 +26,7 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(middleware.Logger())
 	routes.RegisterUserRoutes(e, db)
 	routes.RegisterSwaggerRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
